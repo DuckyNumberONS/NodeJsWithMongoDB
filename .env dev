@@ -1,0 +1,1 @@
+MONGODB_URL = mongodb+srv://hoangducanh2121:<pass>@todolist.fzjklgb.mongodb.net/?retryWrites=true&w=majority
