@@ -32,6 +32,29 @@ const getAllUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const updatedUser = await userSchema
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            admin: req.body.admin,
+          },
+        },
+        { new: true }
+      )
+      .exec();
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const user = await userSchema.findById(req.body.id);
@@ -44,5 +67,6 @@ const deleteUser = async (req, res) => {
 module.exports = {
   createUser,
   getAllUser,
+  updateUser,
   deleteUser,
 };
