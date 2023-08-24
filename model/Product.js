@@ -11,6 +11,11 @@ const ProductSchema = new mongoose.Schema({
     minlength: 5,
     required: true,
   },
+  urlImage: {
+    type: String,
+    minlength: 5,
+    required: true,
+  },
   category: {
     type: String,
     required: true,
@@ -22,6 +27,15 @@ const ProductSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: true,
+  },
+  isHot: {
+    type: Boolean,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    select: false,
   },
 });
 

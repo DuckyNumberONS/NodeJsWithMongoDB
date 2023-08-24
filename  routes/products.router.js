@@ -5,7 +5,7 @@ const middlewareController = require("../controllers/middleware.controller");
 router.get("/getAllProducs", productsController.getProducts);
 router.post(
   "/createProduct",
-  // middlewareController.verifyTokenAdmin, //Admin
+  middlewareController.verifyTokenAdmin, //Admin
   productsController.createProduct
 );
 router.put(

@@ -34,34 +34,34 @@ const orderController = {
     }
   },
 
-  //   updateProduct: async (req, res) => {
-  //     try {
-  //       const updatedProduct = await Todo.findOneAndUpdate(
-  //         { _id: req.params.id },
-  //         {
-  //           $set: {
-  //             title: req.body.title,
-  //             description: req.body.description,
-  //             completed: req.body.completed,
-  //           },
-  //         },
-  //         { new: true }
-  //       ).exec();
+  updateProduct: async (req, res) => {
+    try {
+      const updatedProduct = await Todo.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: {
+            title: req.body.title,
+            description: req.body.description,
+            completed: req.body.completed,
+          },
+        },
+        { new: true }
+      ).exec();
 
-  //       res.json(updatedProduct);
-  //     } catch (error) {
-  //       res.status(500).json({ error: error.message });
-  //     }
-  //   },
+      res.json(updatedProduct);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 
-  //   deleteProduct: async (req, res) => {
-  //     try {
-  //       const deleteProcduct = await Todo.deleteOne({ _id: req.params.id });
-  //       res.json(deleteProcduct);
-  //     } catch (error) {
-  //       res.status(500).json({ error: error.message });
-  //     }
-  //   },
+  deleteProduct: async (req, res) => {
+    try {
+      const deleteProcduct = await Todo.deleteOne({ _id: req.params.id });
+      res.json(deleteProcduct);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 };
 
 module.exports = orderController;

@@ -12,15 +12,25 @@ const productsController = {
 
   createProduct: async (req, res) => {
     try {
-      const product = new Product({
+      const existingProduct = await Product.findOne({
         title: req.body.title,
-        description: req.body.description,
-        completed: req.body.completed,
-        category: req.body.category,
-        price: req.body.price,
       });
-      const savedProduct = await product.save();
-      res.json(savedProduct);
+      if (existingProduct) {
+        return res.status(403).json("Product already exists");
+      } else {
+        const product = new Product({
+          title: req.body.title,
+          description: req.body.description,
+          urlImage: req.body.urlImage,
+          completed: req.body.completed,
+          category: req.body.category,
+          price: req.body.price,
+          quantity: req.body.quantity,
+          isHot: req.body.isHot,
+        });
+        const savedProduct = await product.save();
+        res.json(savedProduct);
+      }
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -34,7 +44,12 @@ const productsController = {
           $set: {
             title: req.body.title,
             description: req.body.description,
+            urlImage: req.body.urlImage,
             completed: req.body.completed,
+            category: req.body.category,
+            price: req.body.price,
+            quantity: req.body.quantity,
+            isHot: req.body.isHot,
           },
         },
         { new: true }

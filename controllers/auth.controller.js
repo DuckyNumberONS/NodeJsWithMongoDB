@@ -54,5 +54,11 @@ const authController = {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  // logoutUser: async (req, res) => {
+  //   try {
+  //   } catch (error) {
+  //     return res.status(500).json({ error: "" });
+  //   }
+  // },
 };
 module.exports = authController;
