@@ -1,6 +1,5 @@
 const Order = require("../model/Order");
 const User = require("../model/User");
-const Product = require("../model/Product");
 
 const orderController = {
   getOrder: async (req, res) => {
@@ -15,6 +14,10 @@ const orderController = {
   createOrder: async (req, res) => {
     try {
       const { username, products, totalOrder } = req.body;
+      console.log(
+        "🚀 ~ file: Order.controller.js:18 ~ createOrder: ~ products:",
+        products
+      );
 
       if (!username || !products || !totalOrder) {
         return res.status(400).json({ error: "Missing required fields." });
