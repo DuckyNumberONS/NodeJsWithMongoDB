@@ -1,5 +1,5 @@
-const Order = require("../model/Order");
-const User = require("../model/User");
+const Order = require('../model/Order');
+const User = require('../model/User');
 
 const orderController = {
   getOrder: async (req, res) => {
@@ -13,20 +13,15 @@ const orderController = {
 
   createOrder: async (req, res) => {
     try {
-      const { username, products, totalOrder } = req.body;
-      console.log(
-        "🚀 ~ file: Order.controller.js:18 ~ createOrder: ~ products:",
-        products
-      );
-
-      if (!username || !products || !totalOrder) {
-        return res.status(400).json({ error: "Missing required fields." });
+      const { username, product, totalOrder } = req.body;
+      if (!username || !product || !totalOrder) {
+        return res.status(400).json({ error: 'Missing required fields.' });
       }
       const user = await User.findOne({ username: username });
 
       const newOrder = new Order({
         username: user._id,
-        product: products,
+        product: product,
         totalOrder: totalOrder,
       });
 
@@ -48,7 +43,7 @@ const orderController = {
             completed: req.body.completed,
           },
         },
-        { new: true }
+        { new: true },
       ).exec();
 
       res.json(updatedProduct);

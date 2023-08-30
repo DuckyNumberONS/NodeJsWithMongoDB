@@ -1,9 +1,9 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
 dotenv.config();
 
-const PORT = 8000;
+const PORT = 8001;
 
 const app = express();
 
@@ -13,6 +13,8 @@ app.listen(PORT, async () => {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-const router = require("./ routes/router");
+const router = require('./ routes/router');
 app.use(router);
-require("./mongoDB/config");
+require('./mongoDB/config');
+
+module.exports = app;

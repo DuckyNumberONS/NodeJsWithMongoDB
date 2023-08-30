@@ -1,4 +1,4 @@
-const Product = require("../model/Product");
+const Product = require('../model/Product');
 
 const productsController = {
   getProducts: async (req, res) => {
@@ -16,13 +16,12 @@ const productsController = {
         title: req.body.title,
       });
       if (existingProduct) {
-        return res.status(403).json("Product already exists");
+        return res.status(403).json('Product already exists');
       } else {
         const product = new Product({
           title: req.body.title,
           description: req.body.description,
           urlImage: req.body.urlImage,
-          completed: req.body.completed,
           category: req.body.category,
           price: req.body.price,
           quantity: req.body.quantity,
@@ -38,6 +37,10 @@ const productsController = {
 
   updateProduct: async (req, res) => {
     try {
+      const existingProduct = await Product.findById(req.params.id);
+      if (!existingProduct) {
+        return res.status(404).json('Product not found');
+      }
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: req.params.id },
         {
@@ -45,14 +48,13 @@ const productsController = {
             title: req.body.title,
             description: req.body.description,
             urlImage: req.body.urlImage,
-            completed: req.body.completed,
             category: req.body.category,
             price: req.body.price,
             quantity: req.body.quantity,
             isHot: req.body.isHot,
           },
         },
-        { new: true }
+        { new: true },
       ).exec();
 
       res.json(updatedProduct);

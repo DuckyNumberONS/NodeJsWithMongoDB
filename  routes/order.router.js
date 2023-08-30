@@ -1,16 +1,19 @@
-const router = require("express").Router();
-const orderController = require("../controllers/Order.controller");
-const middlewareController = require("../controllers/middleware.controller");
+const router = require('express').Router();
+const orderController = require('../controllers/order.controller');
+const middlewareController = require('../middleware/token/token');
+const orderValidate = require('../validation/order/orderValidationMiddleware');
 
 router.get(
-  "/getOrder",
+  '/getOrder',
   middlewareController.verifyTokenMember,
-  orderController.getOrder
+  orderController.getOrder,
 );
+
 router.post(
-  "/createOrder",
+  '/createOrder',
+  orderValidate.validateOrder,
   middlewareController.verifyTokenMember,
-  orderController.createOrder
+  orderController.createOrder,
 );
 
 module.exports = router;
