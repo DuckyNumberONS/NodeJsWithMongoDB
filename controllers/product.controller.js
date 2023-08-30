@@ -1,9 +1,9 @@
-const Product = require('../model/Product');
-
+const ProductSchema = require('../model/Product');
+const { checkExistsById } = require('../utils/checkExistsById');
 const productsController = {
   getProducts: async (req, res) => {
     try {
-      const product = await Product.find();
+      const product = await ProductSchema.find();
       res.json(product);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -12,13 +12,13 @@ const productsController = {
 
   createProduct: async (req, res) => {
     try {
-      const existingProduct = await Product.findOne({
+      const existingProduct = await ProductSchema.findOne({
         title: req.body.title,
       });
       if (existingProduct) {
         return res.status(403).json('Product already exists');
       } else {
-        const product = new Product({
+        const product = new ProductSchema({
           title: req.body.title,
           description: req.body.description,
           urlImage: req.body.urlImage,
@@ -37,11 +37,12 @@ const productsController = {
 
   updateProduct: async (req, res) => {
     try {
-      const existingProduct = await Product.findById(req.params.id);
-      if (!existingProduct) {
-        return res.status(404).json('Product not found');
+      const { id } = req.params;
+      const ProductExists = await checkExistsById(ProductSchema, id);
+      if (!ProductExists) {
+        return res.status(404).json({ error: 'Product not found' });
       }
-      const updatedProduct = await Product.findOneAndUpdate(
+      const updatedProduct = await ProductSchema.findOneAndUpdate(
         { _id: req.params.id },
         {
           $set: {
@@ -65,7 +66,15 @@ const productsController = {
 
   deleteProduct: async (req, res) => {
     try {
-      const deleteProcduct = await Product.deleteOne({ _id: req.params.id });
+      const { id } = req.params;
+      const ProductExists = await checkExistsById(ProductSchema, id);
+
+      if (!ProductExists) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      const deleteProcduct = await ProductSchema.deleteOne({
+        _id: req.params.id,
+      });
       res.json(deleteProcduct);
     } catch (error) {
       res.status(500).json({ error: error.message });

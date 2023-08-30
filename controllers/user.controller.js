@@ -1,13 +1,13 @@
 const userSchema = require('../model/User');
 const bcrypt = require('bcrypt');
-
+const { checkExistsById } = require('../utils/checkExistsById');
 const createUser = async (req, res) => {
   try {
     const existingUser = await userSchema.findOne({
       email: req.body.email,
     });
     if (existingUser) {
-      return res.status(403).json('Email already exists');
+      return res.status(403).json('User already exists');
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, salt);
@@ -37,6 +37,11 @@ const getAllUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    const { id } = req.params;
+    const userExists = await checkExistsById(userSchema, id);
+    if (!userExists) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     const updatedUser = await userSchema
       .findOneAndUpdate(
         { _id: req.params.id },
@@ -60,6 +65,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    const { id } = req.params;
+    const userExists = await checkExistsById(userSchema, id);
+    if (!userExists) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     const user = await userSchema.findById(req.body.id);
     res.status(200).json('Delete successfully');
   } catch (error) {
