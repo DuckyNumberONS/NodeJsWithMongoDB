@@ -1,23 +1,25 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   createUser,
   getAllUser,
   deleteUser,
   updateUser,
-} = require("../controllers/User.controller");
-const middlewareController = require("../controllers/middleware.controller");
+} = require('../controllers/user.controller');
 
-router.post("/createUser", createUser);
-router.get("/getAllUser", middlewareController.verifyTokenAdmin, getAllUser);
+const userValidate = require('../validation/user/userValidationMiddleware');
+const middlewareController = require('../middleware/token/token');
+router.post('/createUser', userValidate.validateUser, createUser);
+router.get('/getAllUser', middlewareController.verifyTokenAdmin, getAllUser);
 router.put(
-  "/updateUser/:id",
+  '/updateUser/:id',
+  userValidate.validateUser,
   middlewareController.verifyTokenMember,
-  updateUser
+  updateUser,
 );
 router.delete(
-  "/deleteUser/:id",
+  '/deleteUser/:id',
   middlewareController.verifyTokenAdmin,
-  deleteUser
+  deleteUser,
 );
 
 module.exports = router;
