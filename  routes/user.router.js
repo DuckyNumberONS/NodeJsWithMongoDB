@@ -5,14 +5,15 @@ const {
   deleteUser,
   updateUser,
 } = require('../controllers/user.controller');
+const validate = require('../middleware/validation/validationMiddleware');
+const middlewareController = require('../middleware/token/tokenMiddleware');
+const { userSchema } = require('../validation/user/userValidation.js');
 
-const userValidate = require('../validation/user/userValidationMiddleware');
-const middlewareController = require('../middleware/token/token');
-router.post('/createUser', userValidate.validateUser, createUser);
+router.post('/createUser', validate(userSchema), createUser);
 router.get('/getAllUser', middlewareController.verifyTokenAdmin, getAllUser);
 router.put(
   '/updateUser/:id',
-  userValidate.validateUser,
+  validate(userSchema),
   middlewareController.verifyTokenMember,
   updateUser,
 );
