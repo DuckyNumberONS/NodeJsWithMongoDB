@@ -1,18 +1,19 @@
 const router = require('express').Router();
 const orderController = require('../controllers/order.controller');
-const middlewareController = require('../middleware/token/token');
-const orderValidate = require('../validation/order/orderValidationMiddleware');
+const middlewareToken = require('../middleware/token/tokenMiddleware');
+const validate = require('../middleware/validation/validationMiddleware');
+const { orderSchema } = require('../validation/order/orderValidation.js');
 
 router.get(
   '/getOrder',
-  middlewareController.verifyTokenMember,
+  middlewareToken.verifyTokenMember,
   orderController.getOrder,
 );
 
 router.post(
   '/createOrder',
-  orderValidate.validateOrder,
-  middlewareController.verifyTokenMember,
+  validate(orderSchema),
+  middlewareToken.verifyTokenMember,
   orderController.createOrder,
 );
 

@@ -1,24 +1,25 @@
 const router = require('express').Router();
 const productsController = require('../controllers/product.controller');
-const middlewareController = require('../middleware/token/token');
-const productValidate = require('../validation/product/productValidationMiddleware');
+const middlewareToken = require('../middleware/token/tokenMiddleware');
+const middlewareValidate = require('../middleware/validation/validationMiddleware');
+const { productSchema } = require('../validation/product/productValidation.js');
 
 router.get('/getAllProducs', productsController.getProducts);
 router.post(
   '/createProduct',
-  productValidate.validateProduct,
-  middlewareController.verifyTokenAdmin,
+  middlewareValidate(productSchema),
+  middlewareToken.verifyTokenAdmin,
   productsController.createProduct,
 );
 router.put(
   '/updateProduct/:id',
-  productValidate.validateProduct,
-  middlewareController.verifyTokenAdmin,
+  middlewareValidate(productSchema),
+  middlewareToken.verifyTokenAdmin,
   productsController.updateProduct,
 );
 router.delete(
   '/deleteProduct/:id',
-  middlewareController.verifyTokenAdmin,
+  middlewareToken.verifyTokenAdmin,
   productsController.deleteProduct,
 );
 

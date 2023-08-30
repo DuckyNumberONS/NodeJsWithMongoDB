@@ -1,22 +1,23 @@
 const router = require('express').Router();
 const paypalController = require('../controllers/paypal.controller');
-const middlewareController = require('../middleware/token/token');
-const paymentValidate = require('../validation/payment/paymentValidationMiddleware');
+const middlewareToken = require('../middleware/token/tokenMiddleware');
+const validate = require('../middleware/validation/validationMiddleware');
+const { paypalSchema } = require('../validation/payment/paymentValidation.js');
 
 router.post(
   '/pay',
-  paymentValidate.validatePayment,
-  middlewareController.verifyTokenMember,
+  validate(paypalSchema),
+  middlewareToken.verifyTokenMember,
   paypalController.create_payment,
 );
 router.get(
   '/success',
-  middlewareController.verifyTokenMember,
+  middlewareToken.verifyTokenMember,
   paypalController.detailPayment,
 );
 router.delete(
   '/cancel',
-  middlewareController.verifyTokenMember,
+  middlewareToken.verifyTokenMember,
   paypalController.cancelPayment,
 );
 
