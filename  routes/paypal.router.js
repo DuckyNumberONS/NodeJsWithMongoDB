@@ -10,11 +10,6 @@ router.post(
   middlewareToken.verifyTokenMember,
   paypalController.create_payment,
 );
-router.get(
-  '/success',
-  middlewareToken.verifyTokenMember,
-  paypalController.detailPayment,
-);
 router.delete(
   '/cancel',
   middlewareToken.verifyTokenMember,
