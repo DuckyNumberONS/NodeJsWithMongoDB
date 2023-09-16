@@ -10,6 +10,22 @@ const productsController = {
     }
   },
 
+  getProductsById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const ProductExists = await checkExistsById(ProductSchema, id);
+      if (ProductExists) {
+        const product = await ProductSchema.findOne({ _id: id });
+        res.json(product);
+      } else {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
   createProduct: async (req, res) => {
     try {
       const existingProduct = await ProductSchema.findOne({
@@ -38,6 +54,8 @@ const productsController = {
   updateProduct: async (req, res) => {
     try {
       const { id } = req.params;
+      const { body } = req;
+
       const ProductExists = await checkExistsById(ProductSchema, id);
       if (!ProductExists) {
         return res.status(404).json({ error: 'Product not found' });
@@ -46,13 +64,14 @@ const productsController = {
         { _id: req.params.id },
         {
           $set: {
-            title: req.body.title,
-            description: req.body.description,
-            urlImage: req.body.urlImage,
-            category: req.body.category,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            isHot: req.body.isHot,
+            ...body,
+            // title: req.body.title,
+            // description: req.body.description,
+            // urlImage: req.body.urlImage,
+            // category: req.body.category,
+            // price: req.body.price,
+            // quantity: req.body.quantity,
+            // isHot: req.body.isHot,
           },
         },
         { new: true },

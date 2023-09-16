@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 mongoose
   .connect(process.env.MONGODB_URL, {
@@ -6,7 +6,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log('Connected to MongoDB');
   })
   .catch((err) => {
     console.log(err);

@@ -31,6 +31,21 @@ const orderController = {
       res.status(500).json({ error: error.message });
     }
   },
+
+  getOrderDetails: async (req, res) => {
+    const { id } = req.params;
+    Order.getOrderDetails(id, (err, orderDetails) => {
+      if (err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      if (!orderDetails || orderDetails.length === 0) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+
+      res.status(200).json(orderDetails[0]);
+    });
+  },
 };
 
 module.exports = orderController;
