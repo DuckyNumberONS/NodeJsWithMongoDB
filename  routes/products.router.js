@@ -5,6 +5,7 @@ const middlewareValidate = require('../middleware/validation/validationMiddlewar
 const { productSchema } = require('../validation/product/productValidation.js');
 
 router.get('/getAllProducs', productsController.getProducts);
+router.get('/getItemProducs/:id', productsController.getProductsById);
 router.post(
   '/createProduct',
   middlewareValidate(productSchema),
@@ -13,7 +14,7 @@ router.post(
 );
 router.put(
   '/updateProduct/:id',
-  middlewareValidate(productSchema),
+  // middlewareValidate(productSchema),
   middlewareToken.verifyTokenAdmin,
   productsController.updateProduct,
 );
