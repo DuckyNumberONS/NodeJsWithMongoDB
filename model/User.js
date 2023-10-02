@@ -1,8 +1,20 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
     username: {
+      type: String,
+      required: true,
+      minlength: 6,
+      maxlength: 50,
+    },
+    urlavatar: {
+      type: String,
+      required: true,
+      minlength: 6,
+      maxlength: 250,
+    },
+    address: {
       type: String,
       required: true,
       minlength: 6,
@@ -25,6 +37,6 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

@@ -1,6 +1,7 @@
 const userSchema = require('../model/User');
 const bcrypt = require('bcrypt');
 const { checkExistsById } = require('../utils/checkExistsById');
+
 const createUser = async (req, res) => {
   try {
     const existingUser = await userSchema.findOne({
@@ -11,8 +12,11 @@ const createUser = async (req, res) => {
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, salt);
+
       const user = new userSchema({
         username: req.body.username,
+        urlavatar: req.body.urlavatar,
+        address: req.body.address,
         email: req.body.email,
         password: hashed,
         admin: req.body.admin,
@@ -23,6 +27,22 @@ const createUser = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userExists = await checkExistsById(userSchema, id);
+    if (userExists) {
+      const user = await userSchema.findOne({ _id: id });
+      res.status(200).json(user);
+    } else {
+      return res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
   }
 };
 
@@ -81,5 +101,6 @@ module.exports = {
   createUser,
   getAllUser,
   updateUser,
+  getUserById,
   deleteUser,
 };
