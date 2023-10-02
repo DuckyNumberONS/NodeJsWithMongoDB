@@ -13,11 +13,10 @@ const productsController = {
   getProductsById: async (req, res) => {
     try {
       const { id } = req.params;
-
       const ProductExists = await checkExistsById(ProductSchema, id);
       if (ProductExists) {
         const product = await ProductSchema.findOne({ _id: id });
-        res.json(product);
+        res.status(200).json(product);
       } else {
         return res.status(404).json({ error: 'Product not found' });
       }
@@ -51,6 +50,36 @@ const productsController = {
     }
   },
 
+  updateProductQuantity: async (req, res) => {
+    try {
+      const { body } = req;
+
+      if (!Array.isArray(body)) {
+        return res.status(400).json({ error: 'Invalid request body' });
+      }
+
+      const updatedProducts = await Promise.all(
+        body.map(async (item) => {
+          const { id, quantity } = item;
+          const productExists = await checkExistsById(ProductSchema, id);
+          if (!productExists) {
+            return null;
+          }
+          const product = await ProductSchema.findOne({ _id: id });
+          if (product.quantity != 0) {
+            product.quantity = Math.max(0, product.quantity - quantity);
+            return product.save();
+          }
+        }),
+      );
+      res
+        .status(200)
+        .json(updatedProducts.filter((product) => product !== null));
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
   updateProduct: async (req, res) => {
     try {
       const { id } = req.params;
@@ -65,13 +94,6 @@ const productsController = {
         {
           $set: {
             ...body,
-            // title: req.body.title,
-            // description: req.body.description,
-            // urlImage: req.body.urlImage,
-            // category: req.body.category,
-            // price: req.body.price,
-            // quantity: req.body.quantity,
-            // isHot: req.body.isHot,
           },
         },
         { new: true },
