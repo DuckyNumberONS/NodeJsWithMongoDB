@@ -18,10 +18,9 @@ router.post(
 );
 
 router.get(
-  '/orderDetails/:id',
-  // validate(orderSchema),
+  '/getOrder/:id',
   middlewareToken.verifyTokenMember,
-  orderController.getOrderDetails,
+  orderController.getOrderById,
 );
 
 module.exports = router;
