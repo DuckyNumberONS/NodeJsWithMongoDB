@@ -18,6 +18,14 @@ router.put(
   middlewareToken.verifyTokenAdmin,
   productsController.updateProduct,
 );
+
+router.put(
+  '/updateProductQuantity',
+  // middlewareValidate(productSchema),
+  middlewareToken.verifyTokenMember,
+  productsController.updateProductQuantity,
+);
+
 router.delete(
   '/deleteProduct/:id',
   middlewareToken.verifyTokenAdmin,
