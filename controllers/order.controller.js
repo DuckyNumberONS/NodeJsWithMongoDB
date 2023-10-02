@@ -1,5 +1,6 @@
 const Order = require('../model/Order');
 const User = require('../model/User');
+const { checkExistsById } = require('../utils/checkExistsById');
 
 const orderController = {
   getOrder: async (req, res) => {
@@ -32,19 +33,19 @@ const orderController = {
     }
   },
 
-  getOrderDetails: async (req, res) => {
-    const { id } = req.params;
-    Order.getOrderDetails(id, (err, orderDetails) => {
-      if (err) {
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-
-      if (!orderDetails || orderDetails.length === 0) {
+  getOrderById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const OrderExists = await checkExistsById(Order, id);
+      if (OrderExists) {
+        const order = await Order.findOne({ _id: id });
+        res.status(200).json(order);
+      } else {
         return res.status(404).json({ error: 'Order not found' });
       }
-
-      res.status(200).json(orderDetails[0]);
-    });
+    } catch {
+      res.status(500).json({ error: error.message });
+    }
   },
 };
 
