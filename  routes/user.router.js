@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {
   createUser,
+  getUserById,
   getAllUser,
   deleteUser,
   updateUser,
@@ -11,6 +12,7 @@ const { userSchema } = require('../validation/user/userValidation.js');
 
 router.post('/createUser', validate(userSchema), createUser);
 router.get('/getAllUser', middlewareController.verifyTokenAdmin, getAllUser);
+router.get('/getUser/:id', middlewareController.verifyTokenMember, getUserById);
 router.put(
   '/updateUser/:id',
   validate(userSchema),
